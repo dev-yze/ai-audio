@@ -3,6 +3,7 @@ audio-generate
 logs
 upload
 
+frp/frpc.toml
 
 .vscode/*
 !.vscode/extensions.json
