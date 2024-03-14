@@ -552,22 +552,25 @@ def alter_table(dbfile):
     # db.execute_sql(f"ALTER TABLE audio_cuts EXISTS {table_name}")
     # db.close_conn
 
+def reset_db_env():
+    db_file = './db/media.db'
+    tables = ['videos', 'audios', 'audio_cuts', 'audio_text_segments']
+    for item in tables:
+        remove_table(db_file, item)
+    tableinit = TableInit(db_file=db_file)
+    tableinit.execute_create_tables()
+
 
 # 使用SQLiteDB类
 if __name__ == "__main__":
 
     db_file = './db/media.db'
-    # alter_table(db_file)
-
-    # remove_table('./db/example.db', 'videos')
-    # remove_table('./db/example.db', 'audios')
-    # remove_table('./db/example.db', 'audio_cuts')
-    # remove_table('./db/example.db', 'stocks')
+    reset_db_env()
     
     # tableinit = TableInit(db_file=db_file)
     # tableinit.execute_create_tables()
 
-    # video_wrapper = VideoWrapper(db_file=db_file)
+    video_wrapper = VideoWrapper(db_file=db_file)
     # video_wrapper.inser_video('a.mp4', './b/a.mp4', 'f45fewe')
     # video_wrapper.inser_video('b.mp4', './b/b.mp4', 'f48fewe')
     # video_wrapper.inser_video('c.mp4', '.c/c.mp4', 'fsfsfew')
@@ -575,10 +578,10 @@ if __name__ == "__main__":
     # print('find_video_by_filename result:')
     # for row in results:
     #     print(dict(row))
-    # results = video_wrapper.find_video_by_md5('f48fewe')
-    # print('find_video_by_md5 result:')
-    # for row in results:
-    #     print(dict(row))
+    results = video_wrapper.find_video_by_md5('f48fewe')
+    print('find_video_by_md5 result:')
+    for row in results:
+        print(dict(row))
     # video_wrapper.del_by_id(1)
     
     # results = video_wrapper.list_video()
@@ -588,7 +591,7 @@ if __name__ == "__main__":
 
 
 
-    # audio_wrapper = AudioWrapper(db_file=db_file)
+    audio_wrapper = AudioWrapper(db_file=db_file)
     # audio_wrapper.del_by_id(15)
     # audio_wrapper.del_by_id(16)
     # audio_wrapper.inser_audio(1, 'a.wav', './b/a.wav', 'f4jfewe')
@@ -603,13 +606,13 @@ if __name__ == "__main__":
     # for row in results:
     #     print(dict(row))
     
-    # results = audio_wrapper.list_audio()
-    # print('list_audio result:')
-    # for row in results:
-    #     print(dict(row))
+    results = audio_wrapper.list_audio()
+    print('list_audio result:')
+    for row in results:
+        print(dict(row))
 
 
-    # audio_cut_wrapper = AudioCutWrapper(db_file=db_file)
+    audio_cut_wrapper = AudioCutWrapper(db_file=db_file)
     # audio_cut_wrapper.inser_audio_cut(1, 'a.wav', './b/a.wav', 'f4jfewe')
     # audio_cut_wrapper.inser_audio_cut(2, 'b.wav', './b/b.wav', 'fa8ffewe')
     # audio_cut_wrapper.inser_audio_cut(2, 'c.wav', '.c/c.wav', 'fsfsfseew')
@@ -622,9 +625,9 @@ if __name__ == "__main__":
     # for row in results:
     #     print(dict(row))
     
-    # results = audio_cut_wrapper.list_audio_cut()
-    # print('list_audio_cut result:')
-    # for row in results:
-    #     print(dict(row))
+    results = audio_cut_wrapper.list_audio_cut()
+    print('list_audio_cut result:')
+    for row in results:
+        print(dict(row))
 
     
