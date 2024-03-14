@@ -1,10 +1,9 @@
-serverAddr = "47.96.65.101"
+serverAddr = "127.0.0.1"
 serverPort = 7000
-auth.token = ""
 
 [[proxies]]
-name = "ai-app-01"
+name = "test-tcp"
 type = "tcp"
 localIP = "127.0.0.1"
-localPort = 9081
-remotePort = 30850
+localPort = 22
+remotePort = 6000
