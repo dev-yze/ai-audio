@@ -98,4 +98,21 @@ def audioExtractText():
     # return ApiResponse(200, 'success', result['text']).to_json()
 
 
-audioExtractText()
+# audioExtractText()
+
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        args = sys.argv[1:]
+        for key, value in enumerate(args):
+            if value.startswith('-'):
+                arg_name = value[1:]
+                if key == len(args) - 1:
+                    arg_value = True
+                else:
+                    arg_value = args[key+1]
+                    if arg_value.startswith('-'):
+                        arg_value = True
+                if arg_name == 'frp' and arg_value:
+                    print('执行frp程序')
+                

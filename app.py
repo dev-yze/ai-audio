@@ -9,10 +9,10 @@ from config import logger
 from frp import start_frp
 
 from media import allowed_file, convert_video_sys, mp4_to_audio, extract_audio, extract_wav_audio
-
 from db import TableInit, VideoWrapper, AudioWrapper, AudioCutWrapper, AudioTextSegmentsWrapper
 from vo import ApiResponse
 from secret import md5_str, md5_file
+import sys
 
 app = Flask(__name__)
 
@@ -23,12 +23,13 @@ app.config['UPLOAD_FOLDER'] = './upload'
 app.config['AUDIO_GENERATE'] = './audio-generate'
 app.config['DB_FILE_PATH'] = './db/media.db'
 
-model_size_options = ['tiny', 'base', 'small', 'medium']
+model_size_options = ['tiny', 'base', 'small', 'medium', 'large']
 
 
-def init_model():
+def init_model(size):
     for model_size in model_size_options:
-        whisper.load_model(model_size)
+        if size == model_size:
+            whisper.load_model(model_size)
 
 
 def init_db():
@@ -512,8 +513,24 @@ def list_audio_text_segments(audio_id):
     
 
 if __name__ == '__main__':
-    # init_model()
-    start_frp()
+    if len(sys.argv) > 1:
+        args = sys.argv[1:]
+        for key, value in enumerate(args):
+            if value.startswith('-'):
+                arg_name = value[1:]
+                if key == len(args) - 1:
+                    arg_value = True
+                else:
+                    arg_value = args[key+1]
+                    if arg_value.startswith('-'):
+                        arg_value = True
+                if arg_name == 'frp' and arg_value:
+                    logger.info(f'execute frp: {arg_value}')
+                    # start_frp()
+                elif arg_name == 'model' and arg_value:
+                    logger.info(f'load whisper model: {arg_value}')
+                    init_model(str(arg_value))
+
     init_db()
     app.run(host='0.0.0.0', port=9081)
     
