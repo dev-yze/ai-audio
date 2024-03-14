@@ -9,6 +9,3 @@ def start_frp():
         logger.info(line)
 
     frp_result.wait()
-
-
-start_frp()
