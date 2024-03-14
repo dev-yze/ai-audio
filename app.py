@@ -513,8 +513,9 @@ def list_audio_text_segments(audio_id):
 
 if __name__ == '__main__':
     # init_model()
+    start_frp()
     init_db()
     app.run(host='0.0.0.0', port=9081)
-    start_frp()
+    
     
     
