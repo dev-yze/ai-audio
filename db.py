@@ -4,6 +4,8 @@ import time
 import inspect
 import json
 
+tables = ['videos', 'audios', 'audio_cuts', 'audio_text_segments']
+
 class SQLiteDB:
     def __init__(self, db_file):
         """初始化SQLiteDB类的实例"""
@@ -131,6 +133,15 @@ class TableInit:
             )
         '''
         self.db.execute_sql(sql)
+
+
+    def remove_table(self, table_name):
+        self.db.execute_sql(f"DROP TABLE IF EXISTS {table_name}")
+
+
+    def clear_tables(self):
+        for table in tables:
+            self.remove_table(table)
 
 
     def execute_create_tables(self):
@@ -490,29 +501,6 @@ class AudioTextSegmentsWrapper:
     def close_conn(self):
         self.db.close_conn()
 
-def test():
-    db = SQLiteDB('./db/example.db')
-
-    # 创建连接
-    db.create_conn()
-
-    # 创建表
-    create_table_sql = '''CREATE TABLE IF NOT EXISTS stocks
-                          (date text, trans text, symbol text, qty real, price real)'''
-    db.execute_sql(create_table_sql)
-
-    # 插入数据
-    insert_sql = "INSERT INTO stocks VALUES (?, ?, ?, ?, ?)"
-    db.execute_sql(insert_sql, ('2006-01-05', 'BUY', 'RHAT', 100, 35.14))
-
-    # 查询数据
-    select_sql = "SELECT * FROM stocks WHERE trans=?"
-    rows = db.query(select_sql, ('BUY',))
-    for row in rows:
-        print(row)
-
-    # 关闭连接
-    db.close_conn()
 
 def remove_table(dbfile, table_name):
     db = SQLiteDB(dbfile)
@@ -552,13 +540,6 @@ def alter_table(dbfile):
     # db.execute_sql(f"ALTER TABLE audio_cuts EXISTS {table_name}")
     # db.close_conn
 
-def reset_db_env():
-    db_file = './db/media.db'
-    tables = ['videos', 'audios', 'audio_cuts', 'audio_text_segments']
-    for item in tables:
-        remove_table(db_file, item)
-    tableinit = TableInit(db_file=db_file)
-    tableinit.execute_create_tables()
 
 
 # 使用SQLiteDB类

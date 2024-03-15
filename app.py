@@ -33,7 +33,12 @@ def init_model(size):
 
 
 def init_db():
-    table_init = TableInit(app.config['DB_FILE_PATH'] )
+    db_path = app.config['DB_FILE_PATH']
+    if not os.path.exists(db_path):
+        os.makedirs(os.path.dirname(db_path), exist_ok=True)
+        open(db_path, 'a').close()
+    table_init = TableInit(db_path)
+    table_init.clear_tables()
     table_init.execute_create_tables()
     
 
@@ -127,7 +132,7 @@ def textToAudio():
 def find_video(md5):
      video_wrapper = VideoWrapper(app.config['DB_FILE_PATH'])
      results = video_wrapper.find_video_by_md5(md5=md5)
-     if results and len(results) == 1:
+     if results and len(results) > 1:
          return ApiResponse(200, "SUCCESS", dict(results[0])).to_json()
      return ApiResponse(200, "EMPTY", None).to_json()
 
@@ -524,14 +529,16 @@ if __name__ == '__main__':
                     arg_value = args[key+1]
                     if arg_value.startswith('-'):
                         arg_value = True
+                if arg_name == 'initdb' and arg_value:
+                    logger.info(f'init db: {arg_value}')
+                    init_db()
                 if arg_name == 'frp' and arg_value:
                     logger.info(f'execute frp: {arg_value}')
-                    # start_frp()
+                    start_frp()
                 elif arg_name == 'model' and arg_value:
                     logger.info(f'load whisper model: {arg_value}')
                     init_model(str(arg_value))
 
-    init_db()
     app.run(host='0.0.0.0', port=9081)
     
     
