@@ -8,7 +8,7 @@ import whisper
 from db import TableInit, VideoWrapper, AudioWrapper, AudioCutWrapper, AudioTextSegmentsWrapper
 from vo import ApiResponse
 from media import convert_to_mp4, convert_video_sys, mp4_to_audio, extract_audio, extract_wav_audio
-
+import argparse 
 
 def cut_wav():
     audio_id = 14 
@@ -102,17 +102,20 @@ def audioExtractText():
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        args = sys.argv[1:]
-        for key, value in enumerate(args):
-            if value.startswith('-'):
-                arg_name = value[1:]
-                if key == len(args) - 1:
-                    arg_value = True
-                else:
-                    arg_value = args[key+1]
-                    if arg_value.startswith('-'):
-                        arg_value = True
-                if arg_name == 'frp' and arg_value:
-                    print('执行frp程序')
-                
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-frp", type=bool, default=False,help="open frp")
+    parser.add_argument('-dbinit', type=bool, default=False, help="clear db, start new project")
+    parser.add_argument('-model', type=str, default='large', help="load whisper model")
+    parser.add_argument('--processes', type=int, default=0, help="cpu_processes")
+
+    args, _ = parser.parse_known_args()
+
+    print(f'frp:{args.frp}')
+    print(f'dbinit:{args.dbinit}')
+    print(f'model:{args.model}')
+    print(f'processes:{args.processes}')
+    if args.frp:
+        print('执行frp程序')
+    if args.dbinit:
+        print('执行数据库初始程序')
+    

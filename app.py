@@ -13,6 +13,7 @@ from db import TableInit, VideoWrapper, AudioWrapper, AudioCutWrapper, AudioText
 from vo import ApiResponse
 from secret import md5_str, md5_file
 import sys
+import argparse 
 
 app = Flask(__name__)
 
@@ -518,27 +519,23 @@ def list_audio_text_segments(audio_id):
     
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        args = sys.argv[1:]
-        for key, value in enumerate(args):
-            if value.startswith('-'):
-                arg_name = value[1:]
-                if key == len(args) - 1:
-                    arg_value = True
-                else:
-                    arg_value = args[key+1]
-                    if arg_value.startswith('-'):
-                        arg_value = True
-                if arg_name == 'initdb' and arg_value:
-                    logger.info(f'init db: {arg_value}')
-                    init_db()
-                if arg_name == 'frp' and arg_value:
-                    logger.info(f'execute frp: {arg_value}')
-                    start_frp()
-                elif arg_name == 'model' and arg_value:
-                    logger.info(f'load whisper model: {arg_value}')
-                    init_model(str(arg_value))
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-frp", type=bool, default=False,help="open frp")
+    parser.add_argument("-frp-config-path", type=str, default='',help="frp config paht")
+    parser.add_argument('-dbinit', type=bool, default=False, help="clear db, start new project")
+    parser.add_argument('-model', type=str, default='large', help="load whisper model")
+    parser.add_argument('--processes', type=int, default=0, help="cpu_processes")
+    args, _ = parser.parse_known_args()
 
+    if args.initdb:
+        logger.info(f'init db: {True}')
+        init_db()
+    if args.frp:
+        frp_config = args.get('frp-config-path', '')
+        start_frp(frp_config)
+    if args.model:
+        init_model(args.model)
     app.run(host='0.0.0.0', port=9081)
     
     
