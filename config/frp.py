@@ -1,6 +1,9 @@
 import subprocess
 import threading
-from config import logger
+from config.log import logger
+import os
+
+current_file_directory = os.path.dirname(os.path.abspath(__file__))
 
 def start_frp(frp_config='./frp/frpc.toml'):
     def run_process():
@@ -13,3 +16,4 @@ def start_frp(frp_config='./frp/frpc.toml'):
         frp_result.wait()
     thread = threading.Thread(target=run_process)
     thread.start()
+

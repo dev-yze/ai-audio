@@ -171,6 +171,6 @@ if __name__ == '__main__':
     # print('---main---')
     # extract_audio('./upload/西游记1986_09.mp4', './upload/西游记1986_09.wav')
 
-    auto_cut_wav('./upload/西游记1986_09.wav')
+    auto_cut_wav('../upload/西游记1986_09.wav')
     
     

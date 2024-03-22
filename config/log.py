@@ -17,8 +17,8 @@ console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 
 # 创建一个日志处理器，用于将日志输出到文件
-if not os.path.exists('./logs'):
-    os.makedirs('./logs')
-file_handler = logging.FileHandler('./logs/app.log')
+if not os.path.exists('logs'):
+    os.makedirs('logs')
+file_handler = logging.FileHandler('logs/app.log')
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)

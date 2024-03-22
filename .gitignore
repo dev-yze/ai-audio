@@ -2,7 +2,7 @@ __pycache__
 audio-generate
 logs
 upload
-frp/frpc_config.toml
+config/frp/frpc_config.toml
 
 .vscode/*
 !.vscode/extensions.json

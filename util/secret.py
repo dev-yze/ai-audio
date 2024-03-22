@@ -20,4 +20,4 @@ def md5_file(file_path):
 
 
 if __name__ == '__main__':
-    print(md5_file('./upload/西游记1986_09.wav'))
+    print(md5_file('../upload/西游记1986_09.wav'))
