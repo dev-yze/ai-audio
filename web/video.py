@@ -41,7 +41,7 @@ def list_video():
 
 
 # 上传视频
-@bp_video.route('/api/v1/upload_video', methods=['POST'])
+@bp_video.route('/api/v1/video/upload', methods=['POST'])
 def uploadVideo():
     '''
         上传视频
